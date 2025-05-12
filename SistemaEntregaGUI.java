@@ -16,7 +16,7 @@ public class SistemaEntregaGUI {
         // Criando a janela
         frame = new JFrame("Sistema de Entregas");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(450, 350);
         frame.setLayout(new BorderLayout());
 
         // Criando lista de entregas
@@ -25,13 +25,15 @@ public class SistemaEntregaGUI {
         JScrollPane scrollPane = new JScrollPane(listaEntregas);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        // Criando painel de botões
-        JPanel panel = new JPanel();
+        // Criando painel de botões com layout melhor
+        JPanel panel = new JPanel(new GridLayout(1, 3, 10, 10)); // GridLayout melhora a organização
         JButton btnAdicionar = new JButton("Cadastrar Entrega");
         JButton btnAtualizar = new JButton("Atualizar Status");
+        JButton btnExcluir = new JButton("Excluir Entrega");
 
         panel.add(btnAdicionar);
         panel.add(btnAtualizar);
+        panel.add(btnExcluir);
         frame.add(panel, BorderLayout.SOUTH);
 
         // Ação para cadastrar entrega
@@ -61,11 +63,28 @@ public class SistemaEntregaGUI {
             }
         });
 
+        // Ação para excluir entrega
+        btnExcluir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int index = listaEntregas.getSelectedIndex();
+                if (index >= 0) {
+                    entregas.remove(index);
+                    listaModel.remove(index);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Selecione uma entrega para excluir!");
+                }
+            }
+        });
+
         // Exibir janela
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new SistemaEntregaGUI();
-    }
+   public static void main(String[] args) {
+    SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+            new SistemaEntregaGUI();
+        }
+    });
 }
