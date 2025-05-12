@@ -15,8 +15,15 @@ public class Main {
             System.out.println("3 - Atualizar status de entrega");
             System.out.println("4 - Sair");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
+            int opcao;
+            try {
+                opcao = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Entrada inválida! Por favor, digite um número.");
+                scanner.nextLine(); // Limpa o buffer inválido
+                continue;
+            }
 
             if (opcao == 1) {
                 cadastrarEntrega();
@@ -65,12 +72,19 @@ public class Main {
 
         System.out.println("\n✏️ Lista de entregas:");
         for (int i = 0; i < entregas.size(); i++) {
-            System.out.println(i + " - " + entregas.get(i).destinatario + " | Status: " + entregas.get(i).status);
+            System.out.println(i + " - " + entregas.get(i).getDestinatario() + " | Status: " + entregas.get(i).getStatus());
         }
 
         System.out.print("Escolha o número da entrega que deseja atualizar: ");
-        int indice = scanner.nextInt();
-        scanner.nextLine(); // Limpa o buffer
+        int indice;
+        try {
+            indice = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Entrada inválida! Por favor, digite um número.");
+            scanner.nextLine(); // Limpa o buffer inválido
+            return;
+        }
 
         if (indice < 0 || indice >= entregas.size()) {
             System.out.println("❌ Número inválido! Tente novamente.");
