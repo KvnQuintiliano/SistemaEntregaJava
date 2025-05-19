@@ -1,100 +1,144 @@
-import java.util.ArrayList;
+import src.controller.SistemaEventos;
 import java.util.Scanner;
 
 public class Main {
-    static ArrayList<Entrega> entregas = new ArrayList<>();
-    static Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
-        System.out.println("🚚 Bem-vindo ao Sistema de Entregas!");
+        try (Scanner scanner = new Scanner(System.in)) {
+            SistemaEventos sistema = new SistemaEventos();
 
-        while (true) {
-            System.out.println("\nEscolha uma opção:");
-            System.out.println("1 - Cadastrar entrega");
-            System.out.println("2 - Exibir todas as entregas");
-            System.out.println("3 - Atualizar status de entrega");
-            System.out.println("4 - Sair");
+            System.out.println("=====================================");
+            System.out.println("     BEM-VINDO AO EVENTOS CIDADE!    ");
+            System.out.println("=====================================");
 
-            int opcao;
-            try {
+            int opcao = -1;
+            while (opcao != 0) {
+                System.out.println("\nMenu Principal:");
+                System.out.println("1. Cadastrar Usuário");
+                System.out.println("2. Cadastrar Evento");
+                System.out.println("3. Listar Eventos");
+                System.out.println("4. Participar de Evento");
+                System.out.println("5. Cancelar Participação");
+                System.out.println("6. Ver Meus Eventos");
+                System.out.println("7. Remover Evento");
+                System.out.println("8. Atualizar Evento");
+                System.out.println("9. Buscar Eventos por Nome");
+                System.out.println("10. Buscar Eventos por Categoria");
+                System.out.println("0. Sair");
+                System.out.print("Escolha uma opção: ");
+
+                if (!scanner.hasNextInt()) {
+                    System.out.println("Entrada inválida. Por favor, digite um número.");
+                    scanner.nextLine(); // limpar entrada inválida
+                    continue;
+                }
                 opcao = scanner.nextInt();
-                scanner.nextLine(); // Limpa o buffer
-            } catch (java.util.InputMismatchException e) {
-                System.out.println("Entrada inválida! Por favor, digite um número.");
-                scanner.nextLine(); // Limpa o buffer inválido
-                continue;
+                scanner.nextLine(); // limpar buffer
+
+                switch (opcao) {
+                    case 1 -> {
+                        System.out.print("Nome: ");
+                        String nome = scanner.nextLine();
+                        System.out.print("Email: ");
+                        String email = scanner.nextLine();
+                        System.out.print("Cidade: ");
+                        String cidade = scanner.nextLine();
+                        sistema.cadastrarUsuario(nome, email, cidade);
+                    }
+                    case 2 -> {
+                        System.out.print("Nome do Evento: ");
+                        String nomeEvento = scanner.nextLine();
+                        System.out.print("Endereço: ");
+                        String endereco = scanner.nextLine();
+                        System.out.print("Categoria (ex: show, festa, esporte): ");
+                        String categoria = scanner.nextLine();
+                        System.out.print("Data e Hora (dd/MM/yyyy HH:mm): ");
+                        String dataHora = scanner.nextLine();
+                        System.out.print("Descrição: ");
+                        String descricao = scanner.nextLine();
+                        sistema.cadastrarEvento(nomeEvento, endereco, categoria, dataHora, descricao);
+                    }
+                    case 3 -> sistema.listarEventos();
+                    case 4 -> {
+                        sistema.listarEventos();
+                        System.out.print("Digite seu email: ");
+                        String emailPart = scanner.nextLine();
+                        System.out.print("Digite o número do evento para participar: ");
+                        if (scanner.hasNextInt()) {
+                            int indexPart = scanner.nextInt();
+                            scanner.nextLine();
+                            sistema.participarDeEvento(indexPart, emailPart);
+                        } else {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido para o evento.");
+                            scanner.nextLine();
+                        }
+                    }
+                    case 5 -> {
+                        sistema.listarEventos();
+                        System.out.print("Digite seu email: ");
+                        String emailCancel = scanner.nextLine();
+                        System.out.print("Digite o número do evento para cancelar participação: ");
+                        if (scanner.hasNextInt()) {
+                            int indexCancel = scanner.nextInt();
+                            scanner.nextLine();
+                            sistema.cancelarParticipacao(indexCancel, emailCancel);
+                        } else {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido para o evento.");
+                            scanner.nextLine();
+                        }
+                    }
+                    case 6 -> {
+                        System.out.print("Digite seu email para ver seus eventos: ");
+                        String emailConsulta = scanner.nextLine();
+                        sistema.listarEventosDoUsuario(emailConsulta);
+                    }
+                    case 7 -> {
+                        sistema.listarEventos();
+                        System.out.print("Digite o número do evento para remover: ");
+                        if (scanner.hasNextInt()) {
+                            int indexRemover = scanner.nextInt();
+                            scanner.nextLine();
+                            sistema.removerEvento(indexRemover);
+                        } else {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido para o evento.");
+                            scanner.nextLine();
+                        }
+                    }
+                    case 8 -> {
+                        sistema.listarEventos();
+                        System.out.print("Digite o número do evento para atualizar: ");
+                        if (scanner.hasNextInt()) {
+                            int indexAtualizar = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.print("Novo nome do Evento: ");
+                            String novoNome = scanner.nextLine();
+                            System.out.print("Novo endereço: ");
+                            String novoEndereco = scanner.nextLine();
+                            System.out.print("Nova categoria: ");
+                            String novaCategoria = scanner.nextLine();
+                            System.out.print("Nova data e hora (dd/MM/yyyy HH:mm): ");
+                            String novaDataHora = scanner.nextLine();
+                            System.out.print("Nova descrição: ");
+                            String novaDescricao = scanner.nextLine();
+                            sistema.atualizarEvento(indexAtualizar, novoNome, novoEndereco, novaCategoria, novaDataHora, novaDescricao);
+                        } else {
+                            System.out.println("Entrada inválida. Por favor, digite um número válido para o evento.");
+                            scanner.nextLine();
+                        }
+                    }
+                    case 9 -> {
+                        System.out.print("Digite o nome para buscar eventos: ");
+                        String nomeBusca = scanner.nextLine();
+                        sistema.buscarEventosPorNome(nomeBusca);
+                    }
+                    case 10 -> {
+                        System.out.print("Digite a categoria para buscar eventos: ");
+                        String categoriaBusca = scanner.nextLine();
+                        sistema.buscarEventosPorCategoria(categoriaBusca);
+                    }
+                    case 0 -> System.out.println("Até a próxima, Kevão!");
+                    default -> System.out.println("Opção inválida. Tente novamente.");
+                }
             }
-
-            if (opcao == 1) {
-                cadastrarEntrega();
-            } else if (opcao == 2) {
-                exibirEntregas();
-            } else if (opcao == 3) {
-                atualizarStatusEntrega();
-            } else if (opcao == 4) {
-                System.out.println("Encerrando o sistema...");
-                break;
-            } else {
-                System.out.println("Opção inválida! Tente novamente.");
-            }
         }
-    }
-
-    public static void cadastrarEntrega() {
-        System.out.print("Digite o nome do destinatário: ");
-        String destinatario = scanner.nextLine();
-        System.out.print("Digite o endereço da entrega: ");
-        String endereco = scanner.nextLine();
-
-        Entrega novaEntrega = new Entrega(destinatario, endereco);
-        entregas.add(novaEntrega);
-        System.out.println("✅ Entrega cadastrada com sucesso!");
-    }
-
-    public static void exibirEntregas() {
-        if (entregas.isEmpty()) {
-            System.out.println("Nenhuma entrega cadastrada.");
-        } else {
-            System.out.println("\n📜 Lista de Entregas:");
-            for (int i = 0; i < entregas.size(); i++) {
-                System.out.println("Entrega #" + i);
-                entregas.get(i).exibirEntrega();
-                System.out.println("---------------------");
-            }
-        }
-    }
-
-    public static void atualizarStatusEntrega() {
-        if (entregas.isEmpty()) {
-            System.out.println("Nenhuma entrega cadastrada.");
-            return;
-        }
-
-        System.out.println("\n✏️ Lista de entregas:");
-        for (int i = 0; i < entregas.size(); i++) {
-            System.out.println(i + " - " + entregas.get(i).getDestinatario() + " | Status: " + entregas.get(i).getStatus());
-        }
-
-        System.out.print("Escolha o número da entrega que deseja atualizar: ");
-        int indice;
-        try {
-            indice = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
-        } catch (java.util.InputMismatchException e) {
-            System.out.println("Entrada inválida! Por favor, digite um número.");
-            scanner.nextLine(); // Limpa o buffer inválido
-            return;
-        }
-
-        if (indice < 0 || indice >= entregas.size()) {
-            System.out.println("❌ Número inválido! Tente novamente.");
-            return;
-        }
-
-        System.out.print("Digite o novo status (Ex: 'Em andamento', 'Entregue', 'Cancelada'): ");
-        String novoStatus = scanner.nextLine();
-
-        entregas.get(indice).atualizarStatus(novoStatus);
-        System.out.println("✅ Status atualizado com sucesso!");
     }
 }
